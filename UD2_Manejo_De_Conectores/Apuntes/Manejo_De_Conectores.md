@@ -11,10 +11,9 @@
 7. [Ejecución de consultas.]()
 8. [Gestión de transacciones.]()
 9. [Manejo de excepciones y recursos.]()
-
-10) [Metadatos.]()
-11) [Patrones de diseño: MVC y DAO.]()
-12) [Elaboración de un CRUD.]()
+10. [Metadatos.]()
+11. [Patrones de diseño: MVC y DAO.]()
+12. [Elaboración de un CRUD.]()
 
 ## Base De Datos Relacionales
 
@@ -65,7 +64,7 @@ Por lo general los fabricantes de BBDD proporcionan driver compatibles con JDBC.
 1.  [Introducción](#qué-es)
 2.  [Arquitectura](#arquitectura-jdbc)
 3.  [Drivers](#tipos-de-drivers-jdbc)
-4.  []()
+4.  [URL JDBC](#url-jdbc)
 5.  []()
 
 ### ¿Qué es?
@@ -109,21 +108,23 @@ Los drivers tipo 4 son los más utilizados actualmente gracias a su portabilidad
 #### Driver JDBC Para MySQL
 
 MySQL es una BDD relacional muy compatible con JDBC mediante drivers específicos.
-**Drivers**:
 
-- MySQLConnector/J
-  - tipo 4
-  - descarga: [MySQLConnector](https://dev.mysql.com/downloads/connector/j/)
-  - Proyecto Maven:
-  ```xml
-  <dependencies>
-      <dependency>
-        <groupId>com.mysql</groupId>
-        <artifactId>mysql-connector-j</artifactId>
-        <version>9.7.0</version>
-      </dependency>
-  </dependencies>
-  ```
+**Drivers**:
+MySQLConnector/J
+- tipo 4
+- descarga: [MySQLConnector](https://dev.mysql.com/downloads/connector/j/)
+- Proyecto Maven:
+```xml
+<dependencies>
+    <dependency>
+      <groupId>com.mysql</groupId>
+      <artifactId>mysql-connector-j</artifactId>
+      <version>9.7.0</version>
+    </dependency>
+</dependencies>
+```
+**Clase del Driver**:
+- com.mysql.cj.jdbc.Driver
 
 #### Driver JDBC Para H2
 
@@ -131,7 +132,6 @@ H2 es un SGBD ligero y de código abierto desarrollado en Java.
 Puede funcinar en modo embebido o cliente-servidor, útil para pruebas, desarrollo y aplicaciones Java que necesitan una BBDD sencilla.
 
 **Drivers**:
-
 - H2 DataBase Engine (org.h2.Driver)
   - tipo 4
   - descarga: [H2](https://h2database.com/html/download.html)
@@ -147,9 +147,54 @@ Puede funcinar en modo embebido o cliente-servidor, útil para pruebas, desarrol
   ```
   Tanto el motor H2 como su driver JDBC se distribuyen en la misma dependencia.
 
+**Clase del Driver**:
+- com.mysql.cj.jdbc.Driver
+
+#### Driver JDBC Para PostgresSQL
+**Drivers**:
+- PostgreSQL JDBC Driver
+**Clase del Driver**:
+- org.postgresql.Driver
+#### Driver JDBC Para Oracle
+**Drivers**:
+- Oracle JDBC Thin Driver
+**Clase del Driver**:
+- oracle.jdbc.OracleDriver
+#### Driver JDBC Para SQLServer
+**Drivers**:
+- Microsoft JDBC Driver for SQL Server
+**Clase del Driver**:
+- com.microsoft.sqlserver. // jdbc.SQLServerDriver
+#### Driver JDBC Para SQLite
+**Drivers**:
+- SQLite JDBC Driver
+**Clase del Driver**:
+- org.sqlite.JDBC
+#### Driver JDBC Para MariaB
+**Drivers**:
+- MariaDB Connector/J
+**Clase del Driver**:
+- org.mariadb.jdbc.Driver
+
 ### URL JDBC
 
 La Url JDBC identifica el tipo de BBDD y contiene la información necesaria para establecer la conexión.
 
 El formato cambia según la SGBD utilizada.
-**Ejemplo**: jdbc:mysql://localhost:3306/mi_base <span>13<span>
+**Ejemplo**: jdbc:mysql://localhost:3306/mi_base
+
+* **jdbc**: indica que se utiliza JDBC.
+* **mysql**: tipo de SGBD.
+* **localhost**: nombre/dirección del servidor.
+* **3306**: puerto de conexión.
+* **mi_base**: nombre de la BBDD.
+
+### Acceso a BBDD
+Para llevar a cabo el acceso a una base de datos usando JDBC desde Java, debemos seguir los sigueintes pasos:
+1. cargar el driver JDBC. // <code>Class.forName("clase-del-driver")</code>
+2. obtener la conexión. // <code>c = DriverManager.getConnection(server, user, password);</code>
+3. crear la consulta. // <code>c.createStatment();
+c.prepareStatement(sql);
+c.prepareCall(sql)</code>
+4. procesar los datos (opcional). // <code></code>
+5. liberar los recursos. // <code></code>
