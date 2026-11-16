@@ -1,8 +1,0 @@
-2026-11-13 10:04:04.028910+01:00 jdbc[3]: exception
-org.h2.jdbc.JdbcSQLSyntaxErrorException: Error de Sintaxis en sentencia SQL "CREATE TABLE [*]IF NOT EXIST ciclos (ID INT AUTO_INCREMENT PRIMARY KEY,nombre VARCHAR(100),GRADO VARCHAR(50) NOT NULL CHECK (LOWER(GRADO IN ('medio', 'superior'))))"; se esperaba "identifier"
-Syntax error in SQL statement "CREATE TABLE [*]IF NOT EXIST ciclos (ID INT AUTO_INCREMENT PRIMARY KEY,nombre VARCHAR(100),GRADO VARCHAR(50) NOT NULL CHECK (LOWER(GRADO IN ('medio', 'superior'))))"; expected "identifier"; SQL statement:
-CREATE TABLE IF NOT EXIST ciclos (ID INT AUTO_INCREMENT PRIMARY KEY,nombre VARCHAR(100),GRADO VARCHAR(50) NOT NULL CHECK (LOWER(GRADO IN ('medio', 'superior')))) [42001-252]
-2026-11-13 10:05:32.068373+01:00 jdbc[3]: exception
-org.h2.jdbc.JdbcSQLSyntaxErrorException: Tabla "ALUMNOS" no encontrada
-Table "ALUMNOS" not found; SQL statement:
-INSERT INTO alumnos VALUES (1, 'bruno', 'medio') [42102-252]

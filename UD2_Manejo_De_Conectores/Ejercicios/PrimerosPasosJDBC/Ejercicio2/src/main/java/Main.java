@@ -23,6 +23,8 @@ public class Main {
             String sqlInsert2 = "INSERT INTO ciclos VALUES (2, 'xoel', 'superior')";
             String sqlInsert3 = "INSERT INTO ciclos VALUES (3, 'anxo', 'medio')";
 
+            
+
             stm.execute(sql);
             stm.execute(sqlInsert1);
             if (stm.getUpdateCount() != -1){
@@ -35,6 +37,12 @@ public class Main {
             stm.execute(sqlInsert3);
             if (stm.getUpdateCount() != -1){
                 System.out.println("Registro insertado");
+            }
+
+            String sqlUpdate1 = "UPDATE ciclos SET nombre = 'bruno', grado = 'superior' WHERE id = 1;";
+            stm.executeUpdate(sqlUpdate1);
+            if (stm.getUpdateCount() != -1){
+                System.out.println("Registro modificado. Número de modificaciones: "+ stm.getUpdateCount() );
             }
 
             Console.main("-web", "-browser");
