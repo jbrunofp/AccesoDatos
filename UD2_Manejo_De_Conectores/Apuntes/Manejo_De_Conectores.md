@@ -193,7 +193,7 @@ El formato cambia según la SGBD utilizada.
 Para llevar a cabo el acceso a una base de datos usando JDBC desde Java, debemos seguir los sigueintes pasos:
 1. cargar el driver JDBC. // <code>Class.forName("clase-del-driver")</code>
 2. obtener la conexión. // <code>c = DriverManager.getConnection(server, user, password);</code>
-3. crear la consulta. // <code>c.createStatment();
+3. crear la consulta.// <blockquote><code>c.createStatment();
 c.prepareStatement(sql);
 c.prepareCall(sql)</code>
 4. procesar los datos (opcional). // <code></code>
