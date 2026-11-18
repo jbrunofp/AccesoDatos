@@ -119,22 +119,25 @@ public class Main {
     }
 
     public static void ejercicio7(Connection con) throws SQLException {
-        String update = "SELECT EMP_NO, COMISION FROM empleados where EMP_NO = ?";
+        String update = "UPDATE empleados SET COMISION = ? where EMP_NO = ? AND NOT (COMISION <=> ?)";
         try (PreparedStatement preStm = con.prepareStatement(update,
                 ResultSet.TYPE_SCROLL_SENSITIVE,
                 ResultSet.CONCUR_UPDATABLE);
              Scanner sc = new Scanner(System.in)) {
 
             System.out.println("Ingresa el número de empleado: ");
-            preStm.setInt(1, sc.nextInt());
+            preStm.setInt(2, sc.nextInt());
             sc.nextLine();
 
-            ResultSet rSet = preStm.executeQuery();
-            rSet.next();
             System.out.println("Ingresa la comisión: ");
-            rSet.updateInt("COMISION", sc.nextInt());
-            rSet.updateRow();
-            System.out.println("Número de filas afectadas: ");
+            int COMISION = sc.nextInt();
+            sc.nextLine();
+            preStm.setInt(1, COMISION);
+            preStm.setInt(3, COMISION);
+
+            int rSet = preStm.executeUpdate();
+
+            System.out.println("Número de filas afectadas: " + rSet);
         }
     }
 }
