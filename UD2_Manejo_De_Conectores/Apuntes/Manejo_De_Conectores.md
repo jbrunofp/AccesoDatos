@@ -5,7 +5,7 @@
 1. <span></span>[Introducción.](#base-de-datos-relacionales)
 2. [Desafse Objeto-Relacional.](#desfase-objeto-relacional)
 3. [Conectores de Bases de Datos](#conectores-de-bases-de-datos)
-4. [Introducción JDBC: Arquitectura y tipos de drivers.]()
+4. [Introducción JDBC: Arquitectura y tipos de drivers.](#jdbc)
 5. [Ejecución de sentencias para definiciones de datos.]()
 6. [Ejecución de sentencias de manipulación de datos.]()
 7. [Ejecución de consultas.]()
@@ -29,6 +29,8 @@ Las **bases de datos relacionales** son las más utilizadas debido a su robustez
 - Permiten aplicar diferentes restricciones para mantener la consistencia de datos.
 - Utiliza SQL como lenguajeestándar para las diferentes operaciones.
 
+[Volver al inicio](#índice)
+
 **Ejemplos**: MySQL, PostgresSQL, Oracle...
 
 ## Desfase Objeto-Relacional
@@ -41,6 +43,8 @@ En el desarrollo de aplicaciones es habitual utilizar dos modelos diferentes de 
 A veces, debido a la diferencia entre los dos modelos, puede haber problemas al pasar objetos Java a bases de datos relacionales o al pasar los datos de la base a un objeto Java. A este problema se le denomina **Desfase Objeto-Relacional**.
 
 Para relacionar ambos modelos debemos hacer conversiones entre objetos Java y registros de la base de datos.
+
+[Volver al inicio](#índice)
 
 ## Conectores De Bases De Datos
 
@@ -57,6 +61,8 @@ Por lo general los fabricantes de BBDD proporcionan driver compatibles con JDBC.
 
 **Ejemplo**: Java -- MySQL &rarr; MySQL **Connector**
 
+[Volver al inicio](#índice)
+
 ## JDBC
 
 ### Indice
@@ -65,7 +71,8 @@ Por lo general los fabricantes de BBDD proporcionan driver compatibles con JDBC.
 2.  [Arquitectura](#arquitectura-jdbc)
 3.  [Drivers](#tipos-de-drivers-jdbc)
 4.  [URL JDBC](#url-jdbc)
-5.  []()
+5.  [Acceso a BBDD](#acceso-a-bbdd-con-jdbc)
+6.  [Clases de la API](#clases-básicas-de-la-api-jdbc)
 
 ### ¿Qué es?
 
@@ -80,6 +87,8 @@ JDBC (**Java DataBase Connectivity**) es la API estándar que Java proporciona p
 
 El JDBC **no resuelve los problemas de desfase Objeto-Relacional**. El programador debe hacer la comversión entre objetos Java, registros de las tablas de la BBDD y viceversa.
 
+[Volver al inicio de sección](#indice)
+
 ### Arquitectura JDBC
 
 Utiliza una arquitectura modular formada por 4 componentes principales:
@@ -90,6 +99,8 @@ Utiliza una arquitectura modular formada por 4 componentes principales:
 - **SGBD**: software encargado de almacenar, gestionar y recuperar los datos.
 
 Gracias a esta arquitectura, se pueden implementar diferentes SGBD sin tener que modificar todo el código. Aunque seguramente sea necesario hacer cambios en las URL's, las dependencias y las sentencias concretas de cada SGBD.
+
+[Volver al inicio de sección](#indice)
 
 ### Tipos De Drivers JDBC
 
@@ -176,6 +187,8 @@ Puede funcinar en modo embebido o cliente-servidor, útil para pruebas, desarrol
 **Clase del Driver**:
 - org.mariadb.jdbc.Driver
 
+[Volver al inicio de sección](#indice)
+
 ### URL JDBC
 
 La Url JDBC identifica el tipo de BBDD y contiene la información necesaria para establecer la conexión.
@@ -188,13 +201,51 @@ El formato cambia según la SGBD utilizada.
 * **localhost**: nombre/dirección del servidor.
 * **3306**: puerto de conexión.
 * **mi_base**: nombre de la BBDD.
+  
+[Volver al inicio de sección](#indice)
 
-### Acceso a BBDD
+### Acceso a BBDD con JDBC
 Para llevar a cabo el acceso a una base de datos usando JDBC desde Java, debemos seguir los sigueintes pasos:
-1. cargar el driver JDBC. // <code>Class.forName("clase-del-driver")</code>
-2. obtener la conexión. // <code>c = DriverManager.getConnection(server, user, password);</code>
-3. crear la consulta.// <blockquote><code>c.createStatment();
+1. **Cargar el driver JDBC.** <blockquote>Para utilizar los driver es necesario añadirlos como dependencias en los proyectos
+   mediante Maven o incorporando manualmente su archivo jar.
+   Antes de Java 6 se debía hacer el registro de manera manual mediante el método Class.forName("clase-del-driver"), actualmente, si los drives son compatibles, se registran automáticamente.
+   <code>Class.forName("clase-del-driver")</code></blockquote>
+2. **Obtener la conexión.** <blockquote>Devuelve un objeto Connection, representando la conexión con la base de datos.
+   <code>c = DriverManager.getConnection(server, user, password);</code></blockquote>
+3. **Crear la consulta.** <blockquote>Se preparan las consultas a ejecutar mediante un objeto Statement o PreparedStatement.<code>
+c.createStatment();
 c.prepareStatement(sql);
-c.prepareCall(sql)</code>
-4. procesar los datos (opcional). // <code></code>
-5. liberar los recursos. // <code></code>
+c.prepareCall(sql) </code></blockquote>
+4. **Ejecutar las consultas** <blockquote>Se ejecutan métodos que realizan consultas y devuelven **ResultSet** medianteexecuteQuery() o métodos que realizan modificaciones en la base con executeUpdate().<code>
+   s = executeQuery();
+   s = executeUpdate(); </code></blockquote>
+5. **Procesar los datos (opcional).**
+   Se suele utilizar un blucle para recorrer las filas devueltas por el ResultSet y así recuperar sus valores. Para avanzar entre filas se usa el método **next()**.
+6. **Liberar los recursos.**
+   Para evitar fugas de recursos, se deben ceerrar dichos recursos. Podemos hacerlo mediante el uso del try-with-resources.
+
+[Volver al inicio de sección](#indice)
+
+### Clases Básicas de la API JDBC
+La interfaz del conector JDBC se encuentra en los paquetes **java.sql** y **javax.sql**. Se trata de interfaces, ya que la implementación específica de cada una, es dada por los proveedores de BBDD.
+
+**Resumen de las principales clases e interfaces**:
+|Nombre|Tipo|Descripción|
+|:---|:---:|---|
+|DriverManager|Clase|Gestiona los drivers JDBC. Se usa para obtener conexiones a BBDD con getConnection().|
+|Connection|Interfaz|Representa una conexión activa a una BBDD. Permite crear consultas y gestionar transacciones.|
+|Statement|Interfaz|Permite ejecutar consultas SQL simples sin parámetros. Se usa con métodos como executeQuery() o executeUpdate().|
+|PreparedStatement|Interfaz|Subinterfaz de Statement. Permite ejecutar consultas SQL parametrizadas con "?". Más segura y eficiente.|
+|CallableStatement|Interfaz|Se usa para ejecutar procedimientos almacenados en la BBDD.|
+|ResultSet|Interfaz|Representa el conjunto de resultados devuelto por una consulta SELECT. Se recorre fila a fila.|
+|SQLException|Clase|Clase para manejar errores y excepciones relacionadas con la BBDD.|
+
+[Volver al inicio de sección](#indice)
+
+#### Interfaces Adicionales de la API JDBC
+También podemos acceder a los metadatos de unaa BBDD, permitiéndonos acceder a su estructura y construir aplicaciones independientemenet del esquema de la BBDD.
+
+|Nombre|Tipo|Descripción|
+|:---|:---:|---|
+|ResultSetMetaData|Interfaz|Permite obtener información sobre las columnas de un ResultSet.|
+|DatabaseMetaData|Interfaz|Proporciona información sobre la BBDD.|
