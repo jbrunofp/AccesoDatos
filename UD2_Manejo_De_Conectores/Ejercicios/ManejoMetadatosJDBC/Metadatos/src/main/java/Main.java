@@ -3,10 +3,10 @@ import java.util.Scanner;
 
 public class Main {
     static void main(String[] args) throws SQLException {
-        String url = "jdbc:mysql://localhost:3306/tienda", user = "bruno", password = "brunoabc123.";
+        String url = "jdbc:mysql://localhost:3306/tienda", user = "root", password = "Holaaloh3343.";
         try (Connection conn = DriverManager.getConnection(url, user, password)) {
-            ejercicio1(conn);
-            //ejercicio2(conn);
+            //ejercicio1(conn);
+            ejercicio2(conn);
             //ejercicio3(conn);
         }
     }
@@ -30,20 +30,57 @@ public class Main {
             System.out.println(rSetTables.getString("TABLE_NAME"));
         }
 
+        System.out.print("Ingresa el nombre de la tabla: ");
         String tableName = sc.nextLine();
         ResultSet rSetColumn = dBmD.getColumns(conn.getCatalog(), null, tableName, "%");
 
         while (rSetColumn.next()) {
-            ResultSetMetaData rSmDColumn = rSetColumn.getMetaData();
-            for (int i = 1; i <= rSmDColumn.getColumnCount(); i++) {
-            System.out.println(rSmDColumn.getColumnName(i));
+            System.out.println(rSetColumn.getString("COLUMN_NAME"));
 
+        }
+
+        System.out.println("\nClave primaria de " + tableName + ":");
+        try (ResultSet rSetPk = dBmD.getPrimaryKeys(conn.getCatalog(), null, tableName)) {
+            while (rSetPk.next()) {
+                System.out.println(rSetPk.getString("COLUMN_NAME"));
             }
         }
     }
 
-    public static void ejercicio2(Connection conn) {
+    public static void ejercicio2(Connection conn) throws  SQLException {
+        String sql = "SELECT * FROM cliente";
 
+        try (Statement stm = conn.createStatement();
+             ResultSet rs = stm.executeQuery(sql)) {
+
+            ResultSetMetaData md = rs.getMetaData();
+            int numCols = md.getColumnCount();
+
+            // 1. Número de columnas
+            System.out.println("Número de columnas: " + numCols);
+
+            // 2. Nombre, etiqueta y tipo SQL de cada columna
+            for (int i = 1; i <= numCols; i++) {
+                System.out.println("Columna " + i
+                        + " | nombre: " + md.getColumnName(i)
+                        + " | etiqueta: " + md.getColumnLabel(i)
+                        + " | tipo SQL: " + md.getColumnTypeName(i));
+            }
+
+            // 3. Recorrido dinámico de los registros
+            System.out.println();
+            for (int i = 1; i <= numCols; i++) {
+                System.out.print(md.getColumnLabel(i) + "\t");
+            }
+            System.out.println();
+
+            while (rs.next()) {
+                for (int i = 1; i <= numCols; i++) {
+                    System.out.print(rs.getObject(i) + "\t");
+                }
+                System.out.println();
+            }
+        }
     }
 
     public static void ejercicio3(Connection conn) {
